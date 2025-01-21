@@ -2,10 +2,8 @@
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center">
-        <h1>Feladatok</h1>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">
-            Új feladat
-        </button>
+        <h1>Tasks</h1>
+        <a href="{{route('task.create')}}" class="btn btn-primary">New task</a>
     </div>
     <div class="row mt-5">
         @foreach($tasks as $task)
@@ -22,6 +20,9 @@
                             {{$task->description}}
                         </p>
                         <div class="d-flex gap-2">
+                            <a href="{{route('task.show', $task)}}" class="btn btn-outline-secondary">
+                                <i class="bi bi-eye"></i>
+                            </a>
                             @if($task->status != App\Models\Task::DONE)
                                 @php
                                     $next = $task->status == App\Models\Task::NEW ? App\Models\Task::IN_PROGRESS : App\Models\Task::DONE;
@@ -51,54 +52,4 @@
                 </div>
             </div>
         @endforeach
-
-        <!-- Modal -->
-        <div class="modal @if($errors->isEmpty()) fade @endif" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Új feladat</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form method="post" action="{{route('task.store')}}">
-                            @csrf
-                            @method("post")
-                            <div class="mb-3">
-                                <label for="title" class="form-label">Cím</label>
-                                <input type="text" id="title" name="title" value="{{old('title')}}"
-                                       class="form-control @error('title') is-invalid @enderror">
-                                @error('title')
-                                <div class="invalid-feedback">
-                                    {{$message}}
-                                </div>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label for="description" class="form-label">Leírás</label>
-                                <textarea id="description" name="description"
-                                          class="form-control @error('description') is-invalid @enderror"
-                                          rows="10">{{old('description')}}</textarea>
-                                @error('description')
-                                <div class="invalid-feedback">
-                                    {{$message}}
-                                </div>
-                                @enderror
-                            </div>
-                            <button type="submit" class="btn btn-primary">Mentés</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
 @endsection
-
-@push('scripts')
-    @if($errors->any())
-        <script>
-            const myModal = new bootstrap.Modal(document.getElementById('createModal'), {});
-            myModal.toggle()
-        </script>
-    @endif
-@endpush

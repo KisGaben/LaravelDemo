@@ -13,9 +13,9 @@ use Illuminate\Validation\Rule;
 class TaskController extends Controller
 {
     static array $status = [
-        Task::NEW => ['title' => 'Új', 'class' => 'text-primary'],
-        Task::IN_PROGRESS => ['title' => 'Folyamatban', 'class' => 'text-warning'],
-        Task::DONE => ['title' => 'Kész', 'class' => 'text-secondary']
+        Task::NEW => ['title' => 'New', 'class' => 'text-primary'],
+        Task::IN_PROGRESS => ['title' => 'In progress', 'class' => 'text-warning'],
+        Task::DONE => ['title' => 'Done', 'class' => 'text-secondary']
     ];
 
     /**
@@ -30,6 +30,26 @@ class TaskController extends Controller
             ->get();
 
         return view('pages.index', compact('tasks', 'status'));
+    }
+
+    /**
+     * Display a single resource.
+     */
+    public function show(Task $task): View
+    {
+        $status = self::$status;
+
+        return view('pages.show', compact('task', 'status'));
+    }
+
+    /**
+     * Show the form for creating the specified resource
+     */
+    public function create(): Factory|View|Application
+    {
+        $status = self::$status;
+
+        return view('pages.create', compact('status'));
     }
 
     /**
@@ -48,7 +68,7 @@ class TaskController extends Controller
         $task = new Task($request->input());
         $task->save();
 
-        return redirect()->back()->with('success', 'Feladat sikeresen létrehozva!');
+        return redirect()->route('task.show', $task)->with('success', 'Task successfully created!');
     }
 
     /**
@@ -77,7 +97,7 @@ class TaskController extends Controller
         $task->update($request->input());
         $task->save();
 
-        return redirect()->route('task.index')->with('success', 'Feladat sikeresen módosítva lett!');
+        return redirect()->route('task.show')->with('success', 'Task successfully modified!');
     }
 
 
@@ -88,6 +108,6 @@ class TaskController extends Controller
     {
         $task->delete();
 
-        return redirect()->back()->with('success', 'Sikeres törlés!');
+        return redirect()->route('task.index')->with('success', 'Task successfully deleted!');
     }
 }
