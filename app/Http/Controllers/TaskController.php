@@ -25,9 +25,7 @@ class TaskController extends Controller
     {
         $status = self::$status;
 
-        $tasks = Task::query()
-            ->orderByRaw("FIELD(status, 'new', 'in_progress', 'done'), id")
-            ->get();
+        $tasks = Task::all();
 
         return view('pages.index', compact('tasks', 'status'));
     }
@@ -60,9 +58,6 @@ class TaskController extends Controller
         $request->validate([
             'title' => 'required',
             'description' => 'required'
-        ], [], [
-            'title' => 'cím',
-            'description' => 'leírás'
         ]);
 
         $task = new Task($request->input());
@@ -89,15 +84,12 @@ class TaskController extends Controller
             'title' => 'required',
             'description' => 'required',
             'status' => ['required', Rule::in(array_keys(self::$status))]
-        ], [], [
-            'title' => 'cím',
-            'description' => 'leírás'
         ]);
 
         $task->update($request->input());
         $task->save();
 
-        return redirect()->route('task.show')->with('success', 'Task successfully modified!');
+        return redirect()->route('task.show', $task)->with('success', 'Task successfully modified!');
     }
 
 

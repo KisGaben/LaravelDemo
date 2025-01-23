@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Task;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,7 +20,7 @@ class TaskFactory extends Factory
         return [
             'title' => $this->faker->sentence,
             'description' => $this->faker->paragraph,
-            'status' => $this->faker->randomElement(['new', 'in_progress', 'done'])
+            'status' => $this->faker->randomElement([Task::NEW, Task::IN_PROGRESS, TASK::DONE])
         ];
     }
 }

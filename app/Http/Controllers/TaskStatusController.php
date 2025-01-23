@@ -16,7 +16,7 @@ class TaskStatusController extends Controller
         $status = $request->get('status');
 
         if(Task::validate($status) === false){
-            return redirect()->back()->withErrors('Hibás státusz!');
+            return redirect()->back()->withErrors('Invalid status!');
         }
 
         $task->setStatus($status);
