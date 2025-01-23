@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Task;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,7 +21,8 @@ class TaskFactory extends Factory
         return [
             'title' => $this->faker->sentence,
             'description' => $this->faker->paragraph,
-            'status' => $this->faker->randomElement([Task::NEW, Task::IN_PROGRESS, TASK::DONE])
+            'status' => $this->faker->randomElement([Task::NEW, Task::IN_PROGRESS, TASK::DONE]),
+            'user_id' => User::all()->random()->id,
         ];
     }
 }

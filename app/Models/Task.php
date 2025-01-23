@@ -54,4 +54,9 @@ class Task extends Model
         return in_array($status, $constants);
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
 }

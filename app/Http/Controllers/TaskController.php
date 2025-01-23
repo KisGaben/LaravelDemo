@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
+use Gate;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
@@ -23,9 +24,11 @@ class TaskController extends Controller
      */
     public function index(): Factory|View|Application
     {
+        Gate::authorize('viewAny', Task::class);
+
         $status = self::$status;
 
-        $tasks = Task::all();
+        $tasks = auth()->user()->tasks()->get();
 
         return view('task.index', compact('tasks', 'status'));
     }
@@ -35,6 +38,8 @@ class TaskController extends Controller
      */
     public function show(Task $task): View
     {
+        Gate::authorize('view', $task);
+
         $status = self::$status;
 
         return view('task.show', compact('task', 'status'));
@@ -45,6 +50,8 @@ class TaskController extends Controller
      */
     public function create(): Factory|View|Application
     {
+        Gate::authorize('create', Task::class);
+
         $status = self::$status;
 
         return view('task.create', compact('status'));
@@ -55,12 +62,15 @@ class TaskController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        Gate::authorize('create', Task::class);
+
         $request->validate([
             'title' => 'required',
             'description' => 'required'
         ]);
 
         $task = new Task($request->input());
+        $task->user()->associate(auth()->user());
         $task->save();
 
         return redirect()->route('task.show', $task)->with('success', 'Task successfully created!');
@@ -71,6 +81,8 @@ class TaskController extends Controller
      */
     public function edit(Task $task): View
     {
+        Gate::authorize('update', $task);
+
         $status = self::$status;
         return view('task.edit', compact('task', 'status'));
     }
@@ -80,6 +92,8 @@ class TaskController extends Controller
      */
     public function update(Request $request, Task $task): RedirectResponse
     {
+        Gate::authorize('update', $task);
+
         $request->validate([
             'title' => 'required',
             'description' => 'required',
@@ -98,6 +112,8 @@ class TaskController extends Controller
      */
     public function destroy(Task $task): RedirectResponse
     {
+        Gate::authorize('delete', $task);
+
         $task->delete();
 
         return redirect()->route('task.index')->with('success', 'Task successfully deleted!');
