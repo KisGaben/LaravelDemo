@@ -27,7 +27,7 @@ class TaskController extends Controller
 
         $tasks = Task::all();
 
-        return view('pages.index', compact('tasks', 'status'));
+        return view('task.index', compact('tasks', 'status'));
     }
 
     /**
@@ -37,7 +37,7 @@ class TaskController extends Controller
     {
         $status = self::$status;
 
-        return view('pages.show', compact('task', 'status'));
+        return view('task.show', compact('task', 'status'));
     }
 
     /**
@@ -47,7 +47,7 @@ class TaskController extends Controller
     {
         $status = self::$status;
 
-        return view('pages.create', compact('status'));
+        return view('task.create', compact('status'));
     }
 
     /**
@@ -72,7 +72,7 @@ class TaskController extends Controller
     public function edit(Task $task): View
     {
         $status = self::$status;
-        return view('pages.edit', compact('task', 'status'));
+        return view('task.edit', compact('task', 'status'));
     }
 
     /**

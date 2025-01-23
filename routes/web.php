@@ -8,4 +8,4 @@ Route::resource('task', TaskController::class);
 
 Route::patch('/task/{task}/status', [TaskStatusController::class, 'update'])->name('task.status');
 
-Route::redirect('/', route('task.index'))->name('index');
+Route::view('/', 'welcome')->name('index');
