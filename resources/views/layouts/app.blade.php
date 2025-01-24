@@ -20,11 +20,34 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{{route('task.index')}}">Index</a>
-                </li>
-            </ul>
+            @auth
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{{route('task.index')}}">Index</a>
+                    </li>
+                    @if(auth()->user()->is_admin)
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="{{route('filament.admin.pages.dashboard')}}">Admin panel</a>
+                        </li>
+                    @endif
+                </ul>
+                <span class="navbar-text pe-4">
+                    {{auth()->user()->name}}
+                </span>
+                <form class="d-flex" method="post" action="{{route('logout')}}">
+                    @csrf
+                    <button class="btn text-light px-0 link-underline-none" type="submit">Log out</button>
+                </form>
+            @else
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{{route('login')}}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{{route('register')}}">Register</a>
+                    </li>
+                </ul>
+            @endauth
         </div>
     </div>
 </nav>

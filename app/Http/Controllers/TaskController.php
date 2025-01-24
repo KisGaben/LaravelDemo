@@ -24,8 +24,6 @@ class TaskController extends Controller
      */
     public function index(): Factory|View|Application
     {
-        Gate::authorize('viewAny', Task::class);
-
         $status = self::$status;
 
         $tasks = auth()->user()->tasks()->get();

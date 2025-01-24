@@ -10,6 +10,7 @@ Route::view('/', 'welcome')->name('index');
 Route::middleware('auth')->group(function () {
     Route::resource('task', TaskController::class);
     Route::patch('/task/{task}/status', [TaskStatusController::class, 'update'])->name('task.status');
+    Route::redirect('home', route('task.index'))->name('home');
 });
 
 Route::middleware('guest')->group(function () {

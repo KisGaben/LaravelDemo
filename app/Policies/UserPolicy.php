@@ -2,18 +2,17 @@
 
 namespace App\Policies;
 
-use App\Models\Task;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class TaskPolicy
+class UserPolicy
 {
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Task $task): bool
+    public function view(User $user, User $model): bool
     {
-        return $task->user()->is($user) or $user->is_admin;
+        return $user->is_admin or $user->is($model);
     }
 
     /**
@@ -27,16 +26,16 @@ class TaskPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Task $task): bool
+    public function update(User $user, User $model): bool
     {
-        return $task->user()->is($user) or $user->is_admin;
+        return $user->is_admin or $user->is($model);
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Task $task): bool
+    public function delete(User $user, User $model): bool
     {
-        return $task->user()->is($user) or $user->is_admin;
+        return $user->is_admin and $user->isNot($model);
     }
 }

@@ -35,7 +35,7 @@ class Task extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'description', 'status'];
+    protected $fillable = ['title', 'description', 'status', 'user_id'];
 
     public const NEW = 'new';
     public const IN_PROGRESS = 'in_progress';
